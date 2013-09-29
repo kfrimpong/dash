@@ -1,0 +1,42 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#brandslip_profile").addClass("active");
+  });
+</script> 
+
+<div class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-12" style="margin-left: 125px; text-align: center;">
+      <form action="/presenter_profile" class="navbar-form pull-left">
+        <span style="font-size: 25px; color: teal">&nbsp;Search Profiles</span>
+        <input type="text" name="full_name" class="form-control" style="width: 550px;border: 2px solid ; " />
+        <button type="submit" class="btn btn-default">Search</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div style="width: 100%;height: 1px;border-top: 2px solid gray;margin-top: 30px">
+  <div style="width: 1250px;">
+    <div style="padding-top: 20px"class="col-lg-3">
+      <div style="background-color: honeydew;padding-top:0px;">
+        <ul style="list-style-type: none;border: 2px solid dimgrey;">
+          <li>
+            <input id="user_presenter_interest_id" name="user_presenter_interest_id" data-val="-1" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">All Categories (<%= User.where(:user_type => 2 ).count() %>)</a></li>
+          <% Jobcategorymaster.all.each do |category| %>
+            <li>
+              <input id="user_presenter_interest_id" name="user_presenter_interest_id" data-val="<%= category.id %>" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+              <a href="#"><%= category.category %> (<%= User.where(:user_type => 2, :interest => category.id).count() %>)</a></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<div id="users_applied_for_job" style="float: left; width: 550px; margin-left: 100px">
+  <div id="presenter_profile">
+    <%= render "presenter_profile" %>
+  </div>
+</div>
+</div>
+
+

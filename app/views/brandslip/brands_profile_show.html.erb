@@ -1,0 +1,88 @@
+<div style="width: 100%;text-align: center;padding-top:50px;">
+  <span><%= link_to 'Back to profile', presenter_profile_path, :class => 'btn btn-primary', :style => "color:white"  %>
+    <%= link_to 'Home', home_path, :class => 'btn btn-primary', :style => "color:white"  %></span>
+  <a  data-toggle="modal" href="#myModal" class="btn btn-primary">Send Message</a>
+  <div style=" padding-top: 15px">
+    <% if current_user.following? @user %>
+      <%= form_tag(:controller => "relationships", :action => "unfollow") do %>
+        <%= hidden_field_tag :follower_id, current_user.id %>
+        <%= hidden_field_tag :followed_id, @user.id %>
+        <%= submit_tag "Unfollow", :class => 'btn btn-primary'  %>
+      <% end %>
+    <% else %>
+      <%= form_for @relationship do %>
+        <%= hidden_field_tag :followed_id, @user.id %>
+        <%= submit_tag "Follow", :class => 'btn btn-primary' %>
+      <% end %>        
+    <% end %>        
+  </div>
+  <p style="font-size: 30px;padding-top: 20px">
+    <%= @user.company_name.capitalize %>
+  </p>
+  <p style="font-size: 20px;padding-top: 20px">
+    <% if @user.image? %>
+      <%= image_tag @user.image_url, :size =>"150x150"  %>
+    <% else %>
+      <%= image_tag "no_image.png", :size =>"150x150"  %>
+    <% end %>
+  </p>
+  <p style="font-size: 20px;padding-top: 20px">
+    <%= @user.dob.strftime("%m/%d/%Y") %>
+  </p>
+  <p style="font-size: 20px;color: grey">My Type</p><br/>
+  <p style="font-size: 20px;">Brand</p>
+  <p style="font-size: 20px;padding-top: 30px;color: grey">About Me </p>
+  <p style="font-size: 20px;padding-top: 20px">
+    <%= @user.description %>
+  </p>
+ <span style="font-size: 20px;padding-top: 20px">
+    <p style="font-size: 20px;padding-top: 30px;color: grey">My Social Links </p>
+    <% if !current_user.facebook.nil? %>
+      <a href="//<%= @user.facebook %>" target="_blank"><%= image_tag "facebook.png", :size => "50x50" %></a>
+    <% else %>
+      <a href="http://facebook.com" target="_blank"><%= image_tag "facebook.png", :size => "50x50" %></a>
+    <% end %>
+    <% if !current_user.twitter.nil? %>
+      <a href="//<%= @user.twitter %>" target="_blank"><%= image_tag "twitter.png", :size => "50x50" %></a>
+    <% else %>
+      <a href="http://twitter.com" target="_blank"><%= image_tag "twitter.png", :size => "50x50" %></a>
+    <% end %>
+    <% if !current_user.twitter.nil? %>
+      <a href="//<%= @user.linkedin %>" target="_blank"><%= image_tag "linkedin.png", :size => "50x50" %></a>
+    <% else %>
+      <a href="http://linkedin.com" target="_blank"><%= image_tag "linkedin.png", :size => "50x50" %></a>
+    <% end %>
+  </span>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= hidden_field_tag "from_user", current_user.id %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Message</h4>
+      </div>
+      <div class="modal-body">
+        <div style="padding-left: 50px"class="input-group">
+          <% if current_user.user_type == 1 %>
+            <%= select(:to, :user, User.where(:user_type => 2).collect{|u| [u.first_name, u.id]}, {:include_blank => "Select Presenter"}) %><br/><br/>
+          <% elsif current_user.user_type == 2 %>
+            <%= select(:to, :user, User.where(:user_type => 1).collect{|u| [u.first_name, u.id]}, {:include_blank => "Select Brand"}) %><br/><br/>
+          <% end %>
+          <input id="message_title" style="width: 400px" type="text" placeholder="Type message title" /><br/><br/>
+          <textarea rows="4" cols="50" id="message_body" placeholder="Type your message"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= image_tag("loader.gif",  :id => "ajaxloading", :style => "display:none") %>
+        <span id="success_msg"></span>
+        <button type="button" class="btn btn-primary btn-mini" onclick="send_message()">Send Message</button>
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

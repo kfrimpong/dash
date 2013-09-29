@@ -1,0 +1,72 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#my_brandslip").addClass("active");
+  });
+</script> 
+<div class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-lg-7">
+      <div style="width: 100%;">
+        <% @job_details.each do |job| %>
+        <span style="padding-left: 1050px; display: inline-block;margin-right: 100px;">
+              <%= link_to 'Back to BrandSlip', home_path, :class => 'btn btn-primary' %> 
+            </span>
+          <div>
+            <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;color: #00468C!important;font-size: 32px;margin-bottom: 8px;">
+              <%= job.job_title %>
+            </h1>
+          </div>
+          <div style="height: 20px;width: 100%">
+            <span style="float: left;color: teal;font-size: 14px;">
+              <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).category %> > 
+              <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %>
+            </span>
+          </div>
+        <div class="praposal-info" style="border: 3px solid dimgrey">
+            <div style="width: 100%;">
+              <div style="width: 50%;float: left;padding-left: 10px;">
+                <span style="font-size: 15px; color: royalblue">Time Left:-</span> <%= job.job_valid_for %></span><br/>
+                <span style="font-size: 15px; color: royalblue">Posted:- </span><%= job.created_at.strftime("%a, %b %d, %Y") %></span><br/>
+              </div>
+              <div style="width: 50%;float: right">
+                <span style="font-size: 15px; color: royalblue">Budget:- </span><%= job.job_price_fixed_type %></span><br/>
+                <span style="font-size: 15px; color: royalblue">BrandSlip Starting Bid:- </span><br/>
+              </div>
+              <div style="width: 100%;padding-left: 10px;padding-top: 50px;">
+                <span style="font-size: 15px; color: royalblue">Description:-  </span>
+                <%= truncate(job.job_description, :length => 75) %>
+              </div>  
+            </div>
+          </div>
+        <div style="font-size: 25px; padding-top: 30px; color: #00468C">Bids by Brands</div>
+          <div>
+            <div>
+              
+          </div>
+        
+          <div id="users_applied_for_job">
+            <% @users_applied_for_job.each do |proposal| %>
+            <div class="praposal-info" style="border: 3px solid dimgrey">
+                <div style="width: 50%;float: left;padding-left: 10px;">
+                  <span style="font-size: 15px; color: royalblue">Presented by:- </span><span><%= proposal['user_name'] %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">Cost for the Proposal:- </span><span><%= proposal.proposal_cost %></span><br/>
+                </div>
+                <div style="width: 50%;float: left;padding-left: 10px;">
+                  <span style="font-size: 15px; color: royalblue">My Earning Cost for Proposal:- </span><span><%= proposal.my_earning %></span><br/>
+                  <span style="font-size: 15px; color: royalblue">I Will Deliver BrandSlip on Date:- </span><span><%= proposal.estimate_delivery_date %></span><br/>
+                </div>
+                <div style="width: 100%;float: left;padding-left: 10px;">
+                  <span style="font-size: 15px; color: royalblue">Description About the BrandSlip:- </span><span><%= proposal.proposal_details %></span><br/>
+                </div>
+              </div>
+            <% end %>        
+          </div>        
+        <% end %>
+        <span style="display: inline-block;margin-right: 100px;">
+          <%= link_to 'Back to BrandSlip', home_path, :class => 'btn btn-primary' %> 
+        </span>
+      </div>
+    </div>
+    
+  </div>
+</div>  

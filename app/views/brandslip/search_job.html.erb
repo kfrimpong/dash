@@ -1,0 +1,142 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#find_work").addClass("active");
+  });
+</script> 
+<div class="container" style="padding-top: 20px">
+  <%= hidden_field_tag "job_user_id", current_user.id %>
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-9" style="text-align: center;">
+      <form action="/search_job" class="navbar-form pull-left">
+        <span style="font-size: 25px; color: teal">&nbsp;Search BrandSlip</span>
+        <input type="text" name="title" class="form-control" style="width: 550px;border: 2px solid ;" />
+        <button type="submit" class="btn btn-default">Search</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div style="width: 100%;height: 1px;border-top: 2px solid gray;margin-top: 30px"></div>
+<div class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-12">
+      <div class="col-3"></div>
+      <div class="col-9"><b><span id="result_found"><%= @jobs.length %></span></b> results found.</div>
+    </div>
+    <div class="col-lg-3">
+      <div style="background-color: honeydew;padding-top:0px;  padding-left: 0px">
+        <ul style="list-style-type: none;border: 2px solid dimgrey; padding-left: 3px" id="category_filter">
+          <li>
+            <input id="user_group_id" class="chk_all_category" data-val="-1" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">All Categories (<%= Job.where('DATE_ADD(created_at, INTERVAL job_valid_for day)>now()').count() %>)</a>
+          </li>
+          <% Jobcategorymaster.all.each do |category| %>
+            <li>
+              <input id="user_group_id" name="user_group_id" data-val="<%= category.id %>" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+              <a href="#"><%= category.category %> (<%= Job.where("DATE_ADD(created_at, INTERVAL job_valid_for day)>now() and Job_category=#{category.id}").count() %>)</a>
+            </li>
+          <% end %>
+        </ul>
+        <ul style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px" id="crowd_size_filter">
+           <li>
+            <input id="" data-val="-1" class="chk_all_category" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">All Categories </a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_all_crowd_size" data-val="-1" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">Crowd Size </a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_crowd_size" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">Less than 20 people</a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_crowd_size" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">20-50 people</a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_crowd_size" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">50-80 people</a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_crowd_size" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">80-100 people</a>
+          </li>
+          <li>
+            <input id="user_group_id" class="chk_crowd_size" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">Greater than 100 people</a>
+          </li>
+        </ul>
+        
+         <ul style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+           <li>
+            <input id="user_group_id" data-val="-1" class="chk_all_category" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">All Categories </a>
+          </li>
+          <li>
+            <input id="user_group_id" data-val="-1" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a style="color: #50852C;font-weight: bold;">Starting Bid </a>
+          </li>
+          <li>
+            <input id="user_group_id" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">Less than $25</a>
+          </li>
+          <li>
+            <input id="user_group_id" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">$25­-$50</a>
+          </li>
+          <li>
+            <input id="user_group_id" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">$51-­$100</a>
+          </li>
+          <li>
+            <input id="user_group_id" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">$101-­$150</a>
+          </li>
+          <li>
+            <input id="user_group_id" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">$151­-$200 +</a>
+          </li>
+        </ul>
+        <ul id="valid_for_filter" style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+          <li style="padding-left: 25px;">
+            <a style="color: #50852C;font-weight: bold;">Valid For </a>
+          </li>
+          <li>
+            <input id="chk_valid_for" data-val="newly_posted" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">Newly Posted</a>
+          </li>
+          <li>
+            <input id="chk_valid_for" data-val="due_soon" name="user_group_id" type="checkbox" value="1" />&nbsp;&nbsp;&nbsp;
+            <a href="#">Due Soon</a>
+          </li>
+        </ul>
+        <ul style="list-style-type: none;border: 2px solid dimgrey;  padding-left: 3px">
+          <li style="padding-left: 25px; padding-bottom: 5px">
+            <a style="color: #50852C;font-weight: bold;">Specific Location</a>
+          </li>
+          <li>
+            <%= select(:job, :state,
+          State.all.collect{|s| [s.state, s.state]},
+
+          {:include_blank => '--Select State--'}, :class => "selectpicker", :style => 'width:258px' ) %> 
+          </li>
+          <li>
+            <%= select(:job, :city,
+          City.all.collect{|c| [c.city, c.city]},
+
+          {:include_blank => '--Select City--'}, :class => "selectpicker", :style => 'width:258px' ) %> 
+          </li>
+          <li style="padding-bottom: 10px; padding-left: 100px">
+            <input type="button" class="btn btn-mini btn-primary" value="Search" onclick="search_by_location()"/>
+          </li>
+        </ul>
+      </div>  
+    </div>
+    <div class="col-9" style="margin-top: 25px; ">
+      <div id="all_jobs">
+        <%= render 'all_jobs' %>
+      </div>
+    </div>
+  </div>
+</div>

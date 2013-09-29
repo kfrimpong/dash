@@ -1,0 +1,35 @@
+<div class="navbar navbar-inverse" style="">
+  <div class="container">
+    <a class="navbar-brand brand" style="color:yellow" href="<%= home_path %>">BrandSlip</a>
+    <div class="nav-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="<%= new_user_registration_path %>">Signup</a></li>
+        <li><a href="<%= new_user_session_path %>">Signin</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="<%= new_contact_u_path %>">Contact Us</a></li>
+    </div> 
+  </div>
+</div>
+
+<div class="landing_layout" style="margin-top: -25px">
+  <div class="title">
+    BrandSlip
+  </div>
+  <div style="padding-top: 100px;text-align: center">
+    <p class="notice" style="color: yellow;font-size: 15px;font-weight: bold"><%= notice %></p>
+  </div>  
+  <div class="summarywords">
+    <span class="black">Marketplace for speakers and presenters to give brands exposure</span>
+  </div>
+  <div style="margin-top: 250px;padding-left: 40%">
+    <span style="width: 20%; height: 10%;">
+      <%= link_to 'Brands', brands_profile_path, :class => "btn btn-large btn-primary", :style => "color:white" %> 
+    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="width: 20%; height: 10%;">
+      <%= link_to 'Presenters', presenters_profile_path, :class => 'btn btn-large btn-primary', :style => "color:white" %> 
+    </span>
+      </br>
+  </div>
+</div>

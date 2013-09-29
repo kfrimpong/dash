@@ -1,0 +1,28 @@
+<div style="padding-top: 35px; width: 100%; text-align: center">
+  <span style="font-size: 35px; padding-top: 15px">Job Proposal by User</span>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Proposal details:</b>
+  <%= @user_job_proposal.proposal_details %>
+</p>
+
+<p>
+  <b>Proposal cost:</b>
+  <%= @user_job_proposal.proposal_cost %>
+</p>
+
+<p>
+  <b>BrandSlip:</b>
+  <%= @user_job_proposal.job_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @user_job_proposal.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_job_proposal_path(@user_job_proposal), :class => 'btn btn-mini btn-primary' %> &nbsp;&nbsp;&nbsp;
+<%= link_to 'Home', home_path, :class => 'btn btn-mini btn-primary' %>
+</div>

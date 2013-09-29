@@ -1,0 +1,21 @@
+  <% @jobs.each do |job| %>
+    <div id="searched_job_div" style="width: 100%; border: 1px solid green; margin-bottom: 20px;padding: 10px">
+      <span style="font-size: large; color: #002a80">Title:-</span> <a href="<%= job_detail_path(:id => job.id) %>" style="font-size: 20px;color: dodgerblue;"><%= job.job_title %></a>
+      <div class="stats">
+        <span style="font-weight: bold; color: #002a80">Starting Bid: </span> <%= job.job_price_fixed_type %></span>&nbsp;&nbsp;|&nbsp;&nbsp; 
+        <span style="font-weight: bold; color: #002a80">Start Date: </span><%= job.created_at.strftime("%a, %b %d, %Y") %></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <span style="font-weight: bold; color: #002a80">Valid For: </span><%= job.job_valid_for.to_i -   (Date.today - job.created_at.to_date).to_i %></span>
+      </div>
+      <div class="stats">
+        <span style="font-weight: bold; color: #002a80">Crowd Size: </span><%= job.crowd_size %></span>
+      </div>
+      <div class="desc">
+        <table>
+          <tr>
+            <td style="font-size: large; color: #002a80;vertical-align: top">Description:-</td>
+            <td><%= job.job_description %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  <% end %> 

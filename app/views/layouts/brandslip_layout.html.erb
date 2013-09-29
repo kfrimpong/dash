@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brandslip</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="">
+<div class="navbar navbar-inverse" style="margin-bottom: 0px">
+  <div class="container">
+    <a class="navbar-brand brand" style="color:yellow" href="#">BrandSlip</a>
+    <div class="nav-collapse collapse navbar-inverse-collapse">
+      <ul class="nav navbar-nav">
+        <li id="my_brandslip"><a href="<%= dashboard_path %>">My Brandslip</a></li>
+        <% if current_user.user_type == 1 %>
+          <li id="find_work" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Find Work<span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="<%= search_job_path %>">Search BrandSlip</a></li>
+          </ul>
+         </li>
+       <% end %>
+       <% if current_user.user_type == 2  %>
+         <li id="post_job"><a href="<%= new_job_path %>">Post your BrandSlip</a></li>
+       <% end %>
+         <% if current_user.user_type == 1 %>
+        <li id="brandslip_profile"><a href="<%= presenter_profile_path %>">Presenter Profiles</a></li>
+        <% elsif current_user.user_type = 2 %>
+        <li id="brandslip_profile"><a href="<%= brand_profile_path %>">Brands Profiles</a></li>
+        <% end %>
+      </ul>
+    </div>     
+    <div style="float: right; margin-top: 5px;">
+      <span style="color: yellow; margin-right: 15px">Welcome 
+        <a href="<%= edit_profile1_path %>" style="color: white"><%= current_user.first_name.capitalize %> <%= current_user.last_name.capitalize %></a>
+      </span>
+      <a class="btn btn-danger" style="color: white" href="<%= destroy_user_session_path %> ">Logout</a>
+    </div> 
+    </div> 
+  </div>
+  
+<%= yield %>
+
+</body>
+</html>

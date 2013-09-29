@@ -1,0 +1,66 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#post_job").addClass("active");
+  });
+</script> 
+<div style="padding-top: 20px">
+<p style="font-size: 45px; color: #08C;text-align: center">Your BrandSlip View</p>
+<p id="notice" style="color: green;text-align: center"><%= notice %></p>
+</div>
+<div style="padding-left: 135px;padding-top: 20px">
+  <div style="width: 100%;">
+    <div style="width: 50%; padding-left: 100px; float: left;">
+      <p>
+        <b>BrandSlip Title:</b>
+        <%= @job.job_title %>
+      </p>
+
+      <p>
+        <b>BrandSlip description:</b>
+        <%= @job.job_description %>
+      </p>
+
+      <p>
+        <b>BrandSlip category:</b>
+        <%= @job.job_category.nil? ? "--" : Jobcategorymaster.find(@job.job_category).category %>
+      </p>
+
+      <p>
+        <b>BrandSlip sub category:</b>
+        <%= @job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(@job.job_sub_category).sub_category %>
+      </p>
+      <p>
+        <b>BrandSlip Proof Selector:</b>
+        <%= @job.proof_selector.nil? ? "--" : @job.proof_selector %>
+      </p>
+    </div>
+
+    <div style="width: 50%; float: left; padding-left: 50px">
+      <p>
+        <b>BrandSlip Starting Bid:</b>
+        <%= @job.job_price_fixed_type %>
+      </p>
+      <p>
+        <b>BrandSlip valid for:</b>
+        <%= @job.job_valid_for %> Days
+      </p>
+      <p>
+        <b>Crowd Size:</b>
+        <%= @job.crowd_size %> Days
+      </p>
+      <p>
+        <b>BrandSlip start date:</b>
+        <%= @job.job_start_date.nil? ? "--" : @job.job_start_date.strftime("%b %d, %Y") %>
+      </p>
+      <p>
+        <b>Time:</b>
+        <%= @job.time.nil? ? "--" : @job.time.strftime("%H:%M:%S") %>
+      </p>
+    </div>
+  </div>
+</div>
+  <div style="padding-top: 50px;padding-left: 40%;display: inline-block;">
+  <%= link_to 'Edit', edit_job_path(@job), :class => 'btn btn-primary', :style => "color:white" %> 
+  <%= link_to 'New BrandSlip', new_job_path, :class => 'btn btn-primary', :style => "color:white" %> 
+  <%= link_to 'Home', home_path, :class => 'btn btn-primary', :style => "color:white" %> 
+  </div>

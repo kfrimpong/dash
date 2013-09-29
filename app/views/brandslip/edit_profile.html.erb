@@ -1,0 +1,195 @@
+<script src="/assets/jquery.form.js?body=1" type="text/javascript"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    console.log("<%= !session[:is_complete_profile].nil? %>")
+    console.log("<%= !session[:is_complete_profile] %>")
+<% if !session[:is_complete_profile].nil? && !session[:is_complete_profile] %>
+      $("#btn_complete_profile").click()
+<% end %> 
+      
+    $('.datepicker').datepicker();
+    //Submit form Ajax  
+    $('.edit_profile').ajaxForm({
+      dataType: 'json',
+      beforeSubmit: function() {
+        $("#edit_profile_ajaxloading").css('display', 'inline-block');
+        var submit = true;
+        var empty_boxes = [];
+        $("input[type='text']:not('.not_required')").each(function(){
+          if($(this).val() == ""){
+            empty_boxes.push($(this).prev('span').text().replace(':', ''));
+            submit = false;
+          }
+        });
+          
+        $("textarea").each(function(){
+          if($(this).val() == ""){
+            empty_boxes.push("Description");
+            submit = false;
+          }
+        });
+        if($("select#user_interest").val() == ""){
+          empty_boxes.push("Interest");
+          submit = false;
+        }
+                
+        if(submit == false){
+          $("#edit_profile_ajaxloading").css('display', 'none');
+          alert("Please enter " + empty_boxes.join(', ') +" fields...");
+          return false;
+        }            
+          
+      },      
+      success: function(html_source) {
+        $("#edit_profile_ajaxloading").css('display', 'none');
+        $("span#edit_profile_success_msg").text("Profile edited successfully...").css('color', 'green');
+        return false;
+      }
+    });
+  });     
+</script>
+
+<div class="container">  
+  <div class="row" style="margin-top: 10px">
+    <a style="display: none" id="btn_complete_profile" data-toggle="modal" href="#myModalCompleteProfile"></a>
+    <div class="bs-example bs-example-tabs">
+      <ul id="myTab" class="nav nav-tabs">
+        <li class=""><a href="#edit_profile" data-toggle="tab">Edit Profile</a></li>
+        <li class=""><a href="#edit_account_detail" data-toggle="tab">Edit Account Details</a></li>        
+        <li class=""><a href="#view_profile" data-toggle="tab">View Profile</a></li>        
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <!-- Edit Profile Section -->
+        <div class="tab-pane fade active in" id="edit_profile">
+          <div>
+            <%= form_for @users, :url => save_user_path, :html => { :class => 'form-horizontal edit_profile',  :multipart => true } do |f| %>
+
+              <div style="text-align: center;margin-bottom: 10px;margin-top: 25px">
+                <span style="font-size: 35px;display: inline-block;margin-bottom: 25px;">Edit Profile</span><br/>
+                <%= image_tag @users.image_url, :size =>"150x150" if @users.image? %>
+              </div>
+              <div style="margin-left: 30%;margin-bottom: 10px;">
+                <span style=" display: inline-block; padding-left: 110px">
+                  <%= f.file_field :image, :size => 34, :style => "display:inline-block;width:186px" %><span style="color: gray;"> (Image size limit 20X20)</span>
+                </span>
+              </div>
+              <div style="margin-left: 30%;margin-bottom: 10px">
+                <span style="width: 100px;display: inline-block">First Name:</span> <%= f.text_field :first_name, :placeholder => "First Name", :class => 'text_field', :size =>30, :maxlength => 50 %></br></br>
+                <span style="width: 100px;display: inline-block">Last Name: </span><%= f.text_field :last_name, :placeholder => "Last Name", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Company: </span><%= f.text_field :company_name, :placeholder => "Company Name", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Email: </span><%= f.text_field :email, :placeholder => "Email", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Date of birth: </span><%= f.text_field :dob, :placeholder => "Dte of Birth", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">LinkedIn: </span><%= f.text_field :linkedin, :placeholder => "www.linkein.com", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Twitter: </span><%= f.text_field :twitter, :placeholder => "www.twitter.com", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Facebook: </span><%= f.text_field :facebook, :placeholder => "www.facebook.com", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <% if @users.user_type == 1 %>
+                <span style="width: 100px;display: inline-block">Website Title: </span><%= f.text_field :website_title, :placeholder => "Brandslip", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Website: </span><%= f.text_field :website, :placeholder => "Personal website", :class => 'text_field', :size =>30, :maxlength => 50 %><br/><br/>
+                <% else %>
+                <span style="width: 100px;display: inline-block">Website Title: </span><%= f.text_field :website_title, :placeholder => "Brandslip", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Website: </span><%= f.text_field :website, :placeholder => "Personal website", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <% end %>
+                <span style="width: 100px;display: inline-block">Interest: </span>
+                <%= f.select :interest, Jobcategorymaster.all.collect{|s| [s.category, s.id]}, {:include_blank => "Select Interest"}, :class => "selectpicker" %><br/><br/>
+                <span style="width: 100px;display: inline-block">Press title: </span><%= f.text_field :press_title, :placeholder => "Add Press title", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">press: </span><%= f.text_field :press, :placeholder => "Add Press", :class => 'text_field not_required', :size =>30, :maxlength => 50 %><br/><br/>
+                <span style="width: 100px;display: inline-block">Description: </span><span><%= f.text_area :description, :placeholder => "Small Description", :rows => 3, :cols =>40 %></span><br/>
+              </div> 
+              <% if @users.user_type == 2 %>
+                <span style="margin-left: 40%;margin-bottom: 10px; padding-left: 45px; color: grey">Two minutes Video about yourself</span><br/>
+                <div style="margin-left: 40%;margin-bottom: 10px; padding-left: 58px">
+                  <button class="btn btn-large">Upload your Video</button>
+                </div>
+              <% end %>
+              <div style="margin-left: 40%;margin-bottom: 10px; padding-top: 8px; padding-left: 114px">
+                <%= f.submit "Update", :class => 'btn btn-primary btn-small' %>
+                <%= image_tag("loader.gif",  :id => "edit_profile_ajaxloading", :style => "display:none") %>
+                <span id="edit_profile_success_msg"></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Account Detail Section -->
+        <div class="tab-pane fade in" id="edit_account_detail">
+          <div style="text-align: center;margin-bottom: 10px;margin-top: 25px">
+            <span style="font-size: 35px;display: inline-block;margin-bottom: 25px;">Edit Account Details</span><br/>
+          </div>
+        </div>
+
+        <!-- Veiw profile Section -->
+        <div class="tab-pane fade in" id="view_profile">
+          <div style="text-align: center;margin-bottom: 10px;margin-top: 25px">
+            <span style="font-size: 35px;display: inline-block;margin-bottom: 25px;">View Profile</span><br/>
+            <div style="width: 100%;text-align: center;padding-top: 10px">
+              <p style="font-size: 30px;padding-top: 20px">
+                <%= current_user.first_name.capitalize %>
+              </p>
+
+              <p style="font-size: 20px;padding-top: 20px">
+                <% if current_user.image? %>
+                  <%= image_tag current_user.image_url, :size =>"150x150"  %>
+                <% else %>
+                  <%= image_tag "no_image.png", :size =>"150x150"  %>
+                <% end %>
+              </p>
+              <p style="font-size: 20px;color: grey">DOB</p>
+              <p><%= current_user.dob.nil? ? "--" : current_user.dob.strftime("%m/%d/%Y") %>
+              </p><br/>
+              <p style="font-size: 20px;color: grey">Company</p>
+                <%= current_user.company_name %>
+              </p><br/>
+              <p style="font-size: 20px;color: grey">Website</p>
+              <p><a href="//<%= current_user.website %>" target="_blank"><%= current_user.website_title %></a>
+              </p><br/>
+              <p style="font-size: 20px;color: grey">Press</p>
+              <p><a href="//<%= current_user.website %>" target="_blank"><%= current_user.press_title %></a>
+              </p>
+              <p style="font-size: 20px;padding-top: 30px;color: grey">About Me </p>
+              <p style="font-size: 20px;padding-top: 20px;">
+                <%= current_user.description %>
+              </p>
+              <span style="font-size: 20px;padding-top: 20px">
+                <p style="font-size: 20px;padding-top: 30px;color: grey">My Social Links </p>
+                <% if !current_user.facebook.nil? %>
+                  <a href="//<%= current_user.facebook %>" target="_blank"><%= image_tag "facebook.png", :size => "50x50" %></a>
+                <% else %>
+                  <a href="http://facebook.com" target="_blank"><%= image_tag "facebook.png", :size => "50x50" %></a>
+                <% end %>
+                <% if !current_user.twitter.nil? %>
+                  <a href="//<%= current_user.twitter %>" target="_blank"><%= image_tag "twitter.png", :size => "50x50" %></a>
+                <% else %>
+                  <a href="http://twitter.com" target="_blank"><%= image_tag "twitter.png", :size => "50x50" %></a>
+                <% end %>
+                <% if !current_user.twitter.nil? %>
+                  <a href="//<%= current_user.linkedin %>" target="_blank"><%= image_tag "linkedin.png", :size => "50x50" %></a>
+                <% else %>
+                  <a href="http://linkedin.com" target="_blank"><%= image_tag "linkedin.png", :size => "50x50" %></a>
+                <% end %>
+              </span>
+              <p>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModalCompleteProfile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Complete your profile</h4>
+      </div>
+      <div class="modal-body">
+        Please update your profile and account details before continue....
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mini" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

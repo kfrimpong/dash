@@ -1,0 +1,65 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("li#my_brandslip").addClass("active");
+    $("form#new_user_job_proposal").submit(function(){
+      var submit = true;
+      var empty_boxes = [];
+      if($("#pro_details").val() == ""){
+        empty_boxes.push("Proposal Description");
+        submit = false;
+      }
+      if($("#user_job_proposal_proposal_cost").val() == ""){
+        empty_boxes.push("Proposal Cost");
+        submit = false;
+      }
+      if(submit == false){
+        alert("Please enter " + empty_boxes.join(', '));
+        return false;
+      }  
+    });
+  });
+</script> 
+<div class="container" style="padding-top: 20px">
+  <div class="row">
+    <div class="col-lg-7">
+      <div style="width: 100%">
+        <% @job_details.each do |job| %>
+          <div>
+            <span style="padding-left: 1050px; display: inline-block;margin-right: 100px;">
+              <%= link_to 'Back to Search', search_job_path, :class => 'btn btn-primary' %> 
+            </span>
+            <h1 style="font-family: Georgia,Times New Roman;font-weight: normal;color: #333!important;font-size: 32px;margin-bottom: 8px;">
+              <%= job.job_title %>
+            </h1>
+          </div>
+          <div style="height: 20px;width: 100%">
+            <span style="float: left;color: #5d656e;font-size: 14px;">
+              <%= job.job_category.nil? ? "--" : Jobcategorymaster.find(job.job_category).category %> > <%= job.job_sub_category.nil? ? "--" : Jobsubcategorymaster.find(job.job_sub_category).sub_category %>
+            </span>
+          </div>
+          <div class="praposal-info" style="border: 3px solid dimgrey">
+            <div style="width: 100%;">
+              <div style="width: 50%;float: left;padding-left: 10px;">
+                <span style="font-size: 15px; color: royalblue">Time Left: </span><span><%= job.job_valid_for %>  Days</span><br/>
+                <span style="font-size: 15px; color: royalblue">Posted: </span><span><%= job.created_at.strftime("%a, %b %d, %Y") %></span><br/>
+                <span style="font-size: 15px; color: royalblue">Time: </span><span><%= job.time %></span><br/>
+              </div>
+              <div style="width: 50%;float: right">
+                <span style="font-size: 15px; color: royalblue">Starting Bid: </span><span><%= job.job_price_fixed_type %></span><br/>
+                <span style="font-size: 15px; color: royalblue">Fixed BrandSlip Price</span><br/>
+                <span style="font-size: 15px; color: royalblue">Crowd Size:- </span><%= truncate(job.crowd_size, :length => 50) %>
+              </div>
+              <div style="width: 100%;padding-left: 10px;padding-top: 50px;">
+                <span style="font-size: 15px; color: royalblue">Proof Selector: </span><span><%= job.proof_selector %></span><br/>
+                <span style="font-size: 15px; color: royalblue">Description:- </span><%= truncate(job.job_description, :length => 75) %>
+              </div>  
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-lg-5" id="post_bid_detail_div" style="padding-bottom: 15px; border: 3px solid dimgrey;height: auto;margin-top: 100px;background-color: yellow" >
+      <%=  render "user_job_proposals/form" %>
+    </div>
+  </div>
+</div>  

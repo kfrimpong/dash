@@ -1,0 +1,57 @@
+.text_field{
+    height: 38px;
+    width: 343px;
+    border-color: grey;
+}
+
+#text_fiel{
+    height: 199px;
+}
+
+#sub_job{
+    width: 119px;
+    height: 35px;
+    color: #08C;
+}
+
+#date_job{
+    width: 77px;
+}
+
+#panel_left{
+    min-width: 950px;
+    text-align: left;
+    width: 950px;
+    margin: 0 auto;
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 55px;
+}
+
+#panel_right{
+    float: right;
+}
+
+.selectpicker{
+    display: inline-block;
+    padding: 4px 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555555;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    vertical-align: middle;
+    height: 30px;
+    line-height: 30px;
+    width: 345px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+
+h1.formhead {
+clear: left;
+font-size: 38px;
+font-weight: 400;
+padding-bottom: 6px;
+color: #50852C;
+}
