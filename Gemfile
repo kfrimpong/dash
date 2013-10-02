@@ -29,6 +29,11 @@ gem "heroku"
 gem 'simple_form'
 gem 'carrierwave'
 gem "rmagick"
+
+group :development do 
+	gem 'pry'
+	gem 'pry-debugger'
+end
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

@@ -57,45 +57,59 @@
   <div class="row">
     <div id="dashboard-nav">
       <!-- Button trigger modal -->
+      <div class="span2 pull-right"><a style="color: white;font-size: 15px" onclick="reset_msg_box()" data-toggle="modal" href="#myModal" class="btn btn-primary btn-mini">Create Message</a></div>
+
     </div>
   </div>
-  <div class="row" style="margin-top: 20px">
-    <ul class="breadcrumb">
-      <div class="btn-group">
-        <button style="background-color: lightslategray;" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <% if current_user.user_type == 1 %>
-            Bids Status: All <span class="caret"></span>
-          <% elsif current_user.user_type == 2 %>
-            BrandSlip Presenter Account Details: All <span class="caret"></span>
-          <% end %>
+</div>
+<div class="container">
+  <div class="row-fluid">
+    <div class="span4 pull-left">
+      <div class="row-fluid">
+        <div class="btn-group pull-left">
+          <button style="background-color: lightslategray;margin-left:30px" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <% if current_user.user_type == 1 %>
+              Bids Status: All <span class="caret"></span>
+            <% elsif current_user.user_type == 2 %>
+              BrandSlip Presenter Account Details: All <span class="caret"></span>
+            <% end %>
 
-        </button>
-        <ul class="dropdown-menu">
-          <li><a href="#">All</a></li>
-          <li><a href="<%= edit_profile1_path %>">Edit Account Details</a></li>
-          <li><a href="<%= edit_profile1_path %>">Edit Profile</a></li>
-        </ul>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">All</a></li>
+            <li><a href="<%= edit_profile1_path %>">Edit Account Details</a></li>
+            <li><a href="<%= edit_profile1_path %>">Edit Profile</a></li>
+          </ul>
+        </div>
+        <div class="pull-left">
+          <ul class="nav span3 side-nav">
+            <% if current_user.user_type == 1 %>
+            <li class="active"><a href="#">My Bids</a></li>
+            <% elsif current_user.user_type == 2 %>
+            <li class="active"><a href="#">My BrandSlips</a></li>
+            <% end %>
+            <li><a href="#">Inbox</a></li>
+            <li><a href="#">Sent Messages</a></li>
+            <li><a href="#">Reviews</a></li>
+            <li><a href="#">History</a></li>
+            <li><a href="#">Contact BrandSlip</a></li>
+          </ul>
+        </div>
+        <!-- contact us div -->
+        <div id="contact_brandslip" class="span10" style="margin:20px 0 0 30px ">
+          <div class="well well-white">
+              <legend>Contact to BrandSlip</legend>
+            <%= render "contact_us/form" %>
+          </div>
+        </div>
+      <!-- contact us div ends  -->
       </div>
-      <a style="float: right;color: white;font-size: 15px" onclick="reset_msg_box()" data-toggle="modal" href="#myModal" class="btn btn-primary btn-mini">Create Message</a>
-    </ul> 
-  </div>
-
-  <div class="bs-example bs-example-tabs">
-    <ul id="myTab" class="nav nav-tabs">
-      <% if current_user.user_type == 1 %>
-        <li class="active"><a href="#home" data-toggle="tab">My Bids</a></li>
-      <% elsif current_user.user_type == 2 %>
-        <li class="active"><a href="#home" data-toggle="tab">My BrandSlips</a></li>
-      <% end %>
-      <li class=""><a href="#profile" data-toggle="tab">My Messages</a></li>
-      <li class=""><a href="#newsfeed" data-toggle="tab">Newsfeed</a></li>
-      <li class=""><a href="#reviews" data-toggle="tab">Reviews</a></li>
-      <li class=""><a href="#history" data-toggle="tab">History</a></li>
-      <li class=""><a href="#contact_brandslip" data-toggle="tab">Contact BrandSlip</a></li>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-      <div class="tab-pane fade active in" id="home">
-        <div class="col-lg-7">
+    </div> 
+    <div class="span8 pull-left">
+      <div class="row-fluid">
+        <!-- bids div -->
+        <div id="home well-white pull-left span12">
+          <div class="col-lg-7">
           <% if current_user.user_type == 1 %>
             <table style="width: 100%">
               <% @user_proposals.each do |job| %>
@@ -144,80 +158,86 @@
             </table>          
           <% end %>
 
+          </div>
         </div>
-      </div>
-      <div class="tab-pane fade" id="profile">
-        <div class="col-lg-12">
-          <div class="" style="margin-top: 20px">
-            <ul id="messageTab" class="nav nav-tabs">
-              <li class="active"><a href="#inbox" data-toggle="tab">Inbox</a></li>
-              <li class=""><a href="#sent_msg" data-toggle="tab">Sent Messages</a></li>
-            </ul>
-            <div id="messageTabContent" class="tab-content" style="margin-top: 20px">
-              <div class="tab-pane fade active in" id="inbox" style="padding-bottom: 5px">
-                <div class="col-lg-7">
+        <!-- bids div ends -->
+        <!-- inbox div starts -->
+        <div class="pull-left span12">
+          <div class="well well-white">
+          <span class="msg-title">Inbox (<%= @inbox.length %>)</span>
+                <ul class="unstyled">
                   <% @inbox.each do |msg| %>
-                    <div id="msg_div" style="width: 100%;padding: 10px; border: 1px solid gray">
-                      <div><b>First Name : </b><span id="msg_from_user"><%= msg['first_name'] %></span></div>
-                      <div><b>Last Name : </b><%= msg['last_name'] %></div>
-                      <div><b>Date : </b><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></div>
-                      <div><b>Company Name : </b><%= msg['company_name'] %></div>
-                      <div><b>Message Title : </b><span id="msg_subject"><%= msg['message_title'] %></span></div>
-                      <div><b>Message Body : </b><%= msg['message_body'] %></div>
-                      <input id="reply_to_msg" data-toggle="modal" href="#myModal" data-user-id="<%= msg['from_user'] %>"
+                    <li class="well">
+                      <div class="clearfix"></div>
+                      <div class="message-box">
+                        <span class="from_user"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </span>
+                        <span class="Subject">Subject : <%= msg['message_title'] %>
+                          <span class="pull-right"><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></span>
+                        </span>
+                        <span class="message_body span8">
+                          <%= msg['message_body'] %>
+                        </span>
+                        <div class="clearfix">
+                          <input id="reply_to_msg" data-toggle="modal" href="#myModal" data-user-id="<%= msg['from_user'] %>"
                              data-user-interest-id="<%= msg['user_interest_id'] %>" type="button" onclick="reply_to_message(this)" 
                              class="btn btn-primary btn-mini" value="Reply" />
                       <input id="delete_messages" type="button" onclick="delete_selected_messages('<%= msg['id'] %>', this)" class="btn btn-danger btn-mini" value="Delete" />
-                    </div>
+                        </div>
+                      </div>
+                    </li>
                   <% end %>
-                </div>
-                <div class="col-lg-5" id="post_bid_detail_div" style="border: 3px solid dimgrey;height: 550px" >
-                  <div style="margin-left: 20px" id="inboxWidget" class="widget">
-                    <div class="widgetTitle" id="DashBoardInbox">Messages</div>
-                    <div class="db-lnav-inbox-item ">
-                      <div class="left ">Inbox</div>
-                      <div class="eol-layout-x1 eol-layout-first eol-layout-last right">&nbsp;</div>
-                      <div class="right "><%= @inbox.length %></div>
-                      <div class="clear"></div>
-                    </div>
-                  </div>
-                </div>  
-              </div>
-              <div class="tab-pane fade" id="sent_msg">
-                <div class="col-lg-7">
-                  <% @sent_msg.each do |msg| %>
-                  <div id="msg_div" style="width: 100%;padding: 10px; border: 1px solid gray">
-                      <div><b>First Name : </b><%= msg['first_name'] %></div>
-                      <div><b>Last Name : </b><%= msg['last_name'] %></div>
-                      <div><b>Date : </b><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></div>
-                      <div><b>Company Name : </b><%= msg['company_name'] %></div>
-                      <div><b>Message Title : </b><%= msg['message_title'] %></div>
-                      <div><b>Message Body : </b><%= msg['message_body'] %></div>
-                      <input id="delete_messages" type="button" onclick="delete_selected_messages('<%= msg['id'] %>', this)" class="btn btn-danger btn-mini" value="Delete" />
-                    </div>
-                  <% end %> 
-                </div>
-
-                <div class="col-lg-5" id="post_bid_detail_div" style="border: 3px solid dimgrey;height: 550px" >
-                  <div style="margin-left: 20px" id="inboxWidget" class="widget">
-                    <div class="widgetTitle" id="DashBoardInbox">Messages</div>
-                    <div class="db-lnav-inbox-item ">
-                      <div class="left ">Sent Messages</div>
-                      <div class="eol-layout-x1 eol-layout-first eol-layout-last right">&nbsp;</div>
-                      <div class="right "><%= @sent_msg.length %></div>
-                      <div class="clear"></div>
-                    </div>
-                  </div>
-                </div>                 
-              </div>
-            </div> 
+                </ul>
           </div>
         </div>
-      </div> 
-      <div class="tab-pane fade" id="newsfeed">
-        <div class="col-lg-12">
-          <div class="col-lg-7" >
-            <table style="width: 100%;float: left">
+        <!-- inbox div ends -->
+        <!-- sent messages div starts -->
+        <div class="pull-left span12">
+          <div class="well well-white">
+          <span class="msg-title"></i>Sent Messages (<%= @sent_msg.length %>)</span>
+                <ul class="unstyled">
+                  <% @sent_msg.each do |msg| %>
+                    <li class="well">
+                      <div class="clearfix"></div>
+                      <div class="message-box">
+                        <span class="from_user"><%= msg['first_name'] %> <%= msg['last_name'] %> (<%= msg['company_name'] %>): </span>
+                        <span class="Subject">Subject : <%= msg['message_title'] %>
+                          <span class="pull-right"><%= msg['created_at'].strftime("%m/%d/%Y at %I:%M%p") %></span>
+                        </span>
+                        <span class="message_body span8">
+                          <%= msg['message_body'] %>
+                        </span>
+                        <div class="clearfix">
+                          <input id="delete_messages" type="button" onclick="delete_selected_messages('<%= msg['id'] %>', this)" class="btn btn-danger btn-mini pull-left" value="Delete" />
+                        </div>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+          </div>
+        </div>
+        <!-- sent messages div ends -->
+        <!-- news feed div starts -->
+        <div class="pull-left span12" id="newsfeed">
+          <div class="well well-white">
+          <span class="msg-title"></i>Newsfeed</span>
+          <div>
+            Posts<span style="float: right"><%= @ribbits.length %></span>
+          </div>
+          <div>
+            Followers<span style="float: right"><a href="<%= followers_users_path %>"><%= current_user.followers.count %></a></span>
+          </div>
+          <div>Followings<span style="float: right"><a href="<%= followings_users_path %>"><%= current_user.followeds.count %></a></span></div>
+              <div style="margin-left: 20px" id="inboxWidget" class="widget">
+                <div>Add New Newsfeed</div>
+                <div>
+                  <textarea cols="40" id="newsfeed_description" placeholder="Newsfeed Description" rows="3"></textarea><br/><br/>
+                  <input type="button" class="btn btn-mini btn-primary" value="Add" onclick="add_newsfeed()" />
+                  <%= image_tag("loader.gif",  :id => "newsfeed_add_ajaxloading", :style => "display:none") %>
+                  <span id="newsfeed_add_success_msg"></span>
+                </div>
+              </div>
+
+                <ul class="unstyled">
               <% @ribbits.each do |ribbit| %>
                 <tr>
                   <td>
@@ -237,54 +257,25 @@
                 </tr>
               <% end %>
             </table>
-          </div>
-          <div>
-            <div class="col-lg-5" id="post_bid_detail_div" style="border: 3px solid dimgrey;height: auto" >
-              <div style="margin-left: 20px" id="inboxWidget" class="widget">
-                <div style="font-size: 18px"class="widgetTitle" id="DashBoardInbox">Posts
-                  <span style="float: right"><%= @ribbits.length %></span>
-                </div>
-                <div class="db-lnav-inbox-item ">
-                  <div class="left ">Followers</div>
-                  <span style="float: right"><a href="<%= followers_users_path %>"><%= current_user.followers.count %></a></span>
-                </div>
-                <div class="eol-layout-x1 eol-layout-first eol-layout-last right">&nbsp;</div>
-                <div class="db-lnav-inbox-item ">
-                  <div class="left ">Followings</div>
-                  <span style="float: right"><a href="<%= followings_users_path %>"><%= current_user.followeds.count %></a></span></div>
-                <div class="eol-layout-x1 eol-layout-first eol-layout-last right">&nbsp;</div>
-                <div class="clear"></div>
-              </div>
-              <div style="margin-left: 20px" id="inboxWidget" class="widget">
-                <div style="font-size: 18px"class="widgetTitle" id="DashBoardInbox">Add New Newsfeed
-                </div>
-                <div>
-                  <textarea cols="40" id="newsfeed_description" placeholder="Newsfeed Description" rows="3"></textarea><br/><br/>
-                  <input type="button" class="btn btn-mini btn-primary" value="Add" onclick="add_newsfeed()" />
-                  <%= image_tag("loader.gif",  :id => "newsfeed_add_ajaxloading", :style => "display:none") %>
-                  <span id="newsfeed_add_success_msg"></span>
-                </div>
-              </div>
-            </div>
+                
           </div>
         </div>
-      </div> 
-      <div class="tab-pane fade" id="reviews">
-      </div>
-      <div class="tab-pane fade" id="history">
-      </div>
-      <div class="tab-pane fade" id="contact_brandslip">
-        <div style="font-size: 25px;margin-top: 20px;text-align: center;color: blue">
-            Contact to BrandSlip
-          </div>
-          <div style="padding-left: 35%">
-            <%= render "contact_us/form" %>
-          </div>
+
+        </div>
+        <!-- news feed div ends -->
+        <!-- reviews div starts -->
+        <div id="reviews">
+        </div>
+        <!-- reviews div ends -->
+        <!-- history div starts -->
+        <div id="history">
+        </div>
+        <!-- history div ends -->
       </div>
     </div>
   </div>
 </div>
-
+  
 
 <!-- Modal -->
 <div class="modal fade" id="myModal">
@@ -303,7 +294,7 @@
           <% if current_user.user_type == 1 %>
             <%= select(:to, :user, User.where(:user_type => 2).collect{|u| [u.first_name, u.id]}, {:include_blank => "Select Presenter"}) %><br/><br/>
           <% elsif current_user.user_type == 2 %>
-            <%= select(:to, :user, User.where(:user_type => 1).collect{|u| [u.first_name, u.id]}, {:include_blank => "Select Brand"}) %><br/><br/>
+            <%= select(:to, :user, User.where(:user_type => 1).collect{|u| [u.first_name, u.id]}, {:include_blank => 'Select Brand'}) %><br/><br/>
           <% end %>
           <input id="message_title" style="width: 400px" type="text" placeholder="Type message title" /><br/><br/>
           <textarea rows="4" cols="50" id="message_body" placeholder="Type your message"></textarea>

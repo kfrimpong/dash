@@ -158,9 +158,9 @@ function reply_to_message(ctrl){
 }
 
 function reset_msg_box(){
-    $(".modal-dialog").find("#msg_user_interest").val('');
-    $(".modal-dialog").find("#to_user option").remove();
-    $(".modal-dialog").find("#to_user").html("<option value=''>Select User</option>");
+    // $(".modal-dialog").find("#msg_user_interest").val('');
+    // $(".modal-dialog").find("#to_user option").remove();
+    // $(".modal-dialog").find("#to_user").html("<option value=''>Select User</option>");
     $(".modal-dialog").find("#message_title").val('');
     $(".modal-dialog").find("#message_body").val('');
 }
